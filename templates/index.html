@@ -1,60 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Smart GPS Chatbot</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Hyderabad Route Finder</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background: #f0f2f5; font-family: Arial, sans-serif; }
+    .chat-container { max-width: 500px; margin: 40px auto; background: #fff; border-radius: 16px; box-shadow: 0 6px 20px rgba(0,0,0,0.1); display: flex; flex-direction: column; height: 80vh; overflow: hidden; }
+    .chat-header { background: #0d6efd; color: white; padding: 15px; font-weight: bold; text-align: center; border-radius: 16px 16px 0 0; }
+    .chat-box { flex: 1; overflow-y: auto; padding: 15px; background: #f8f9fa; }
+    .msg { margin: 10px 0; padding: 10px 15px; border-radius: 16px; max-width: 80%; line-height: 1.4; clear: both; }
+    .user-msg { background: #0d6efd; color: white; float: right; text-align: right; }
+    .bot-msg { background: #e9ecef; color: #212529; float: left; }
+    .input-area { display: flex; border-top: 1px solid #ddd; padding: 10px; }
+    #user-input { flex: 1; border-radius: 20px 0 0 20px; border: 1px solid #ccc; padding: 10px 15px; }
+    #send-btn { border-radius: 0 20px 20px 0; background: #0d6efd; color: white; border: none; padding: 10px 20px; }
+    #send-btn:hover { background: #0b5ed7; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Smart GPS Chatbot 🗺️</h1>
-
-        <div id="chat" class="chat-box">
-            <div class="bot">Welcome! Enter start and destination areas.</div>
-        </div>
-
-        <div class="input-container">
-            <input type="text" id="start" placeholder="Start Area">
-            <input type="text" id="end" placeholder="Destination Area">
-            <button onclick="findRoute()">Send</button>
-        </div>
+  <div class="chat-container">
+    <div class="chat-header">🗺️ Hyderabad Route Finder</div>
+    <div id="chat-box" class="chat-box">
+      <div class="bot-msg msg">
+        Hello! 👋 Enter start and destination city to find the best route.<br>
+        Available cities: 
+        <b>
+          Hyderabad, Secunderabad, LB Nagar, Banjara Hills, Gachibowli, Hitech City, Medchal, Miyapur, 
+          Kukatpally, Ameerpet, Begumpet, Tolichowki, Nampally, Madhapur, Jubilee Hills, Nacharam, 
+          Malkajgiri, Kompally, Uppal, Dilsukhnagar
+        </b>
+      </div>
     </div>
+    <div class="input-area">
+      <input type="text" id="user-input" placeholder="Type: Hyderabad to Hitech City...">
+      <button id="send-btn">Send</button>
+    </div>
+  </div>
 
-    <script>
-        function appendMessage(sender, text) {
-            const chat = document.getElementById("chat");
-            const div = document.createElement("div");
-            div.className = sender;
-            div.textContent = (sender === "user" ? "You: " : "Bot: ") + text;
-            chat.appendChild(div);
-            chat.scrollTop = chat.scrollHeight;
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function(){
+      $("#send-btn").click(sendMessage);
+      $("#user-input").keypress(function(e){ if(e.which===13) sendMessage(); });
+
+      function appendMessage(sender, text, isHTML=false){
+        const msgClass = sender==="user" ? "user-msg" : "bot-msg";
+        const msg = $("<div>").addClass("msg "+msgClass);
+        if(isHTML) msg.html(text); else msg.text(text);
+        $("#chat-box").append(msg);
+        $("#chat-box").scrollTop($("#chat-box")[0].scrollHeight);
+      }
+
+      function sendMessage(){
+        const input = $("#user-input").val().trim();
+        if(!input) return;
+        appendMessage("user", input);
+        $("#user-input").val("");
+
+        let parts = input.split("to");
+        if(parts.length !== 2){ 
+          appendMessage("bot","⚠️ Please type in format: City1 to City2"); 
+          return; 
         }
+        const start = parts[0].trim();
+        const end = parts[1].trim();
 
-        function findRoute() {
-            const start = document.getElementById("start").value.trim();
-            const end = document.getElementById("end").value.trim();
-            if (!start || !end) {
-                alert("Please enter both start and destination areas.");
-                return;
+        $.ajax({
+          type: "POST",
+          url: "/get_route",
+          data: {start: start, end: end},
+          dataType: "json",
+          success: function(data){
+            if(data.success){
+              const path = data.path;
+              let routeText = "✅ Start from "+path[0];
+              if(path.length>2) routeText += ", then go through "+path.slice(1,-1).join(", ");
+              if(path.length>1) routeText += ", finally reach "+path[path.length-1]+".";
+              routeText += `<br>📏 Total Distance: ${data.total_distance} km`;
+              appendMessage("bot", routeText, true);
+            } else {
+              appendMessage("bot", "❌ "+data.error);
             }
-
-            appendMessage("user", `Find route from ${start} to ${end}`);
-
-            fetch("/get_route", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: `start=${start}&end=${end}`
-            })
-            .then(response => response.json())
-            .then(data => {
-                if(data.route) {
-                    appendMessage("bot", data.route);
-                } else {
-                    appendMessage("bot", data.error || "No response found!");
-                }
-            });
-        }
-    </script>
+          },
+          error: function(){
+            appendMessage("bot","❌ Server error. Try again.");
+          }
+        });
+      }
+    });
+  </script>
 </body>
 </html>

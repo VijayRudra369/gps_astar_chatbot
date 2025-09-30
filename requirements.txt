@@ -1,5 +1,7 @@
-Flask==2.3.4
-networkx==3.2
-heapdict==1.0.1
-# Optional: for LLM integration
-# llama-cpp-python==0.1.54
+Flask==2.3.3             # Lightweight web framework for building the backend and serving HTML pages
+networkx==3.1            # For graph creation and A* shortest path algorithm
+Werkzeug==2.3.7          # Flask dependency for routing, debugging, and WSGI utilities
+Jinja2==3.1.2            # Templating engine used by Flask to render HTML pages dynamically
+itsdangerous==2.1.2      # Security package used by Flask to sign cookies and tokens
+click==8.1.6             # Command-line utilities required by Flask
+MarkupSafe==2.1.3        # Dependency for Jinja2 to safely handle HTML templates
