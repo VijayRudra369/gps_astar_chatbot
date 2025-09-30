@@ -1,58 +1,58 @@
-/* Reset default margins */
 body, html {
     margin: 0;
     padding: 0;
-    font-family: 'Arial', sans-serif;
-    background-color: #f0f4f8;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(to right, #74ebd5, #ACB6E5);
 }
 
-/* Page title */
-h2 {
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+h1 {
     text-align: center;
     color: #333;
-    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
-/* Chat container */
-#chat {
-    width: 400px;
-    height: 350px;
-    margin: 20px auto;
-    padding: 15px;
-    border-radius: 10px;
-    background-color: #fff;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+.chat-box {
+    height: 400px;
     overflow-y: auto;
     border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 15px;
+    background-color: #f9f9f9;
 }
 
-/* Input fields */
 input[type="text"] {
-    width: 180px;
+    width: 45%;
     padding: 10px;
-    margin: 5px;
-    border-radius: 5px;
+    margin: 5px 2%;
+    border-radius: 8px;
     border: 1px solid #ccc;
     outline: none;
 }
 
-/* Button styling */
 button {
     padding: 10px 20px;
-    margin: 5px;
-    border-radius: 5px;
+    border-radius: 8px;
     border: none;
     background-color: #4CAF50;
-    color: white;
-    cursor: pointer;
+    color: #fff;
     font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
 button:hover {
     background-color: #45a049;
 }
 
-/* Chat messages */
 .user {
     color: #1a73e8;
     margin: 5px 0;
@@ -65,8 +65,7 @@ button:hover {
     font-weight: bold;
 }
 
-/* Input container */
 .input-container {
     text-align: center;
-    margin-bottom: 20px;
+    margin-top: 15px;
 }

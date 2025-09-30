@@ -1,27 +1,5 @@
-requirements.txt
-flask==2.3.2
-networkx==3.1
-matplotlib==3.8.1
-
-Explanation
-
-flask → Runs the web server and serves your HTML frontend.
-
-networkx → Creates and handles the graph of Hyderabad areas for the A* algorithm.
-
-matplotlib → Optional, in case you want to visualize graphs later (not required for the chatbot itself).
-
-How to use in VS Code
-
-Save the above content as requirements.txt in your project folder.
-
-Open VS Code terminal in the project folder.
-
-Run:
-
-pip install -r requirements.txt
-
-
-This will install all dependencies automatically.
-
-If you want, I can now give a step-by-step guide to run your full chatbot project in VS C
+Flask==2.3.4
+networkx==3.2
+heapdict==1.0.1
+# Optional: for LLM integration
+# llama-cpp-python==0.1.54
