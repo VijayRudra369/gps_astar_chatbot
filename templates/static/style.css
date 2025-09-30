@@ -1,0 +1,72 @@
+/* Reset default margins */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f4f8;
+}
+
+/* Page title */
+h2 {
+    text-align: center;
+    color: #333;
+    margin-top: 20px;
+}
+
+/* Chat container */
+#chat {
+    width: 400px;
+    height: 350px;
+    margin: 20px auto;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    overflow-y: auto;
+    border: 1px solid #ccc;
+}
+
+/* Input fields */
+input[type="text"] {
+    width: 180px;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+/* Button styling */
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 5px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Chat messages */
+.user {
+    color: #1a73e8;
+    margin: 5px 0;
+    font-weight: bold;
+}
+
+.bot {
+    color: #28a745;
+    margin: 5px 0;
+    font-weight: bold;
+}
+
+/* Input container */
+.input-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
